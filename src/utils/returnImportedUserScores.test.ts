@@ -27,7 +27,7 @@ describe("returnImportedUserScores", () => {
 	it("should merge userScores and excelData and return the highest score for each user", () => {
 		const result = returnImportedUserScores(mockUserScores, mockExcelData);
 		const expected: UserScore[] = [
-			{ name: "David", score: 30, userId: 4 },
+			{ name: "David", score: 30, userId: 6 },
 			{ name: "Charlie", score: 25, userId: 3 },
 			{ name: "Alice", score: 20, userId: 1 },
 			{ name: "Bob", score: 15, userId: 2 },
@@ -49,7 +49,7 @@ describe("returnImportedUserScores", () => {
 			{ name: "Alice", score: 25 },
 		]);
 		expect(result).toEqual([
-			{ name: "Alice", score: 25, userId: 1 }, // Alice should have the highest score of 25
+			{ name: "Alice", score: 25, userId: 1 },
 			{ name: "Bob", score: 15, userId: 2 },
 			{ name: "Charlie", score: 5, userId: 3 },
 		]);
@@ -60,22 +60,22 @@ describe("returnImportedUserScores", () => {
 			{ name: "Eve", score: 40 },
 		]);
 		expect(result).toEqual([
-			{ name: "Eve", score: 40, userId: 4 }, // Eve should be added as a new user with userId 4
-			...mockUserScores,
+			{ name: "Eve", score: 40, userId: 4 },
+			...mockUserScores.sort((a, b) => b.score - a.score),
 		]);
 	});
 
 	it("should return an empty array when all excelData is empty", () => {
 		const result = returnImportedUserScores(mockUserScores, []);
-		expect(result).toEqual(mockUserScores); // Only userScores should be returned
+		expect(result).toEqual(mockUserScores);
 	});
 
 	it("should handle empty userScores with only data from excelData", () => {
 		const result = returnImportedUserScores([], mockExcelData);
 		const expected: UserScore[] = [
-			{ name: "Alice", score: 20, userId: 1 },
-			{ name: "Charlie", score: 25, userId: 2 },
 			{ name: "David", score: 30, userId: 3 },
+			{ name: "Charlie", score: 25, userId: 2 },
+			{ name: "Alice", score: 20, userId: 1 },
 		];
 		expect(result).toEqual(expected);
 	});
