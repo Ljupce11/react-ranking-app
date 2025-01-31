@@ -5,7 +5,7 @@ import { ExternalLink } from "./ExternalLink";
 
 export const ExerciseDescription = () => {
 	return (
-		<VStack align="left">
+		<VStack align="left" marginBottom={5}>
 			<Box>
 				<H2>Initial site</H2>
 				<P>

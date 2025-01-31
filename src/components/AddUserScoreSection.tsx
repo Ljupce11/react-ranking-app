@@ -23,7 +23,7 @@ export const AddUserScoreSection = ({
 	handleAddNewScore,
 }: Props) => {
 	return (
-		<HStack spacing={10} align="flex-start">
+		<HStack spacing={10} align="flex-start" marginBottom={5}>
 			<ExcelDropzone
 				onSheetDrop={handleSheetData}
 				label="Import excel file here"
