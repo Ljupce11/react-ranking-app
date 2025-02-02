@@ -20,12 +20,12 @@ type Props = {
 	overrideExistingUserScore: (duplicateUser: DuplicateUser) => void;
 };
 
-export const DuplicateUserModal = ({
+export default function DuplicateUserModal({
 	isOpen,
 	duplicateUser,
 	onClose,
 	overrideExistingUserScore,
-}: Props) => {
+}: Props) {
 	return (
 		<Modal size={"xl"} onClose={onClose} isOpen={isOpen} isCentered>
 			<ModalOverlay />
@@ -41,7 +41,7 @@ export const DuplicateUserModal = ({
 						</strong>
 						score ({duplicateUser.score})
 					</P>
-					<P>Would you like to override the user's existing score?</P>
+					<P>Would you like to add the new score anyway?</P>
 				</ModalBody>
 				<ModalFooter gap={2}>
 					<Button onClick={onClose}>No</Button>
@@ -52,4 +52,4 @@ export const DuplicateUserModal = ({
 			</ModalContent>
 		</Modal>
 	);
-};
+}

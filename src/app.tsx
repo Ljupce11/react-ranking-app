@@ -1,10 +1,9 @@
 import { Container, H2, Icon } from "@northlight/ui";
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 
 import { HStack, useDisclosure, useToast } from "@chakra-ui/react";
 import { ExecutionDuo } from "@northlight/icons";
 import { AddUserScoreSection } from "./components/AddUserScoreSection.js";
-import { DuplicateUserModal } from "./components/DuplicateUserModal.js";
 // import { ExerciseDescription } from "./components/ExerciseDescription.js";
 import { UserScoresTable } from "./components/UserScoresTable.js";
 import { TOAST_SETTINGS } from "./constants";
@@ -12,6 +11,11 @@ import type { DuplicateUser, ExcelRow, NewUser } from "./types/types";
 import { handleAddNewScoreUtil } from "./utils/handleAddNewScoreUtil.js";
 import { returnImportedUserScores } from "./utils/returnImportedUserScores.js";
 import { returnInitialUserScores } from "./utils/returnInitialUserScores.js";
+import { returnUpdatedExistingUserScore } from "./utils/returnUpdatedExistingUserScore.js";
+
+const DuplicateUserModal = React.lazy(
+	() => import("./components/DuplicateUserModal"),
+);
 
 export default function App() {
 	const toast = useToast();
@@ -76,8 +80,11 @@ export default function App() {
 			});
 			return;
 		}
-		const updatedUserScores = [...userScores];
-		updatedUserScores[existingUserIndex].score = newUserScore.score;
+		const updatedUserScores = returnUpdatedExistingUserScore(
+			newUserScore,
+			userScores,
+			existingUserIndex,
+		);
 		setUserScores(updatedUserScores.sort((a, b) => b.score - a.score));
 		onClose();
 		toast({
@@ -94,12 +101,14 @@ export default function App() {
 			</HStack>
 			{/* <ExerciseDescription /> */}
 			{isOpen && duplicateUser && (
-				<DuplicateUserModal
-					isOpen={isOpen}
-					duplicateUser={duplicateUser as DuplicateUser}
-					onClose={onClose}
-					overrideExistingUserScore={overrideExistingUserScore}
-				/>
+				<Suspense fallback={null}>
+					<DuplicateUserModal
+						isOpen={isOpen}
+						duplicateUser={duplicateUser}
+						onClose={onClose}
+						overrideExistingUserScore={overrideExistingUserScore}
+					/>
+				</Suspense>
 			)}
 			<AddUserScoreSection
 				handleSheetData={handleSheetData}
