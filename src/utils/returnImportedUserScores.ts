@@ -20,7 +20,8 @@ export const returnImportedUserScores = (
 			}
 		} else {
 			// If it's a new user, assign a new userId
-			const newUserId = userScores.length + index + 1;
+			const newUserId =
+				Math.max(0, ...userScores.map((user) => user.userId)) + index + 1;
 			scoreMap.set(row.name, {
 				name: row.name,
 				score: row.score,
