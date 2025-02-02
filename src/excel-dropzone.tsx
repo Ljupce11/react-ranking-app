@@ -1,9 +1,10 @@
 import { palette } from "@northlight/tokens";
-import { Box, Center } from "@northlight/ui";
+import { Box, Center, Icon, VStack } from "@northlight/ui";
 import React from "react";
 import Dropzone from "react-dropzone";
 import { read, utils } from "xlsx";
 
+import { DataUploadDuo } from "@northlight/icons";
 import type { ExcelDropzoneProps } from "./types/types";
 
 export function ExcelDropzone(props: ExcelDropzoneProps) {
@@ -29,8 +30,14 @@ export function ExcelDropzone(props: ExcelDropzoneProps) {
 					border="2px dashed"
 					borderColor={palette.gray["200"]}
 					minW="20%"
+					height={"200px"}
+					backgroundColor={palette.gray["50"]}
+					cursor={"pointer"}
 				>
-					<Center height="200">{label}</Center>
+					<VStack gap={2} justifyContent={"center"} height={"100%"}>
+						<Icon size="lg" as={DataUploadDuo} />
+						<Center>{label}</Center>
+					</VStack>
 				</Box>
 			)}
 		</Dropzone>
