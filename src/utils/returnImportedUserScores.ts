@@ -6,17 +6,22 @@ export const returnImportedUserScores = (
 	excelData: ExcelRow[],
 ): UserScore[] => {
 	const scoreMap = new Map<string, UserScore>();
-	userScores.forEach(({ name, score, userId }, _index) => {
-		scoreMap.set(name, { name, score, userId });
+	userScores.forEach(({ name, ...rest }, _index) => {
+		scoreMap.set(name, { name, ...rest });
 	});
 
 	excelData.forEach((row, index) => {
 		const existingUser = scoreMap.get(row.name);
 
 		if (existingUser) {
-			// If the user already exists, update only if the new score is higher
-			if (row.score > existingUser.score) {
-				scoreMap.set(row.name, { ...existingUser, score: row.score });
+			// If the user already exists, update the score and allScores
+			if (existingUser?.allScores) {
+				existingUser.allScores = Array.from(
+					new Set([...existingUser.allScores, row.score].sort((a, b) => a - b)),
+				);
+				existingUser.score = Math.max(...existingUser.allScores);
+			} else {
+				existingUser.allScores = [row.score];
 			}
 		} else {
 			// If it's a new user, assign a new userId
@@ -26,6 +31,7 @@ export const returnImportedUserScores = (
 				name: row.name,
 				score: row.score,
 				userId: newUserId,
+				allScores: [row.score],
 			});
 		}
 	});

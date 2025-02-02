@@ -1,95 +1,132 @@
-import { describe, expect, it, vi } from "vitest";
-
-import type { ExcelRow } from "../types/types";
-import type { UserScore } from "../types/types";
+import { describe, expect, it } from "vitest";
+import type { ExcelRow, UserScore } from "../types/types";
 import { returnImportedUserScores } from "./returnImportedUserScores";
 
-// Mock data
-const mockUserScores: UserScore[] = [
-	{ name: "Alice", score: 10, userId: 1 },
-	{ name: "Bob", score: 15, userId: 2 },
-	{ name: "Charlie", score: 5, userId: 3 },
-];
-
-const mockExcelData: ExcelRow[] = [
-	{ name: "Alice", score: 20 },
-	{ name: "Charlie", score: 25 },
-	{ name: "David", score: 30 },
-];
-
-// Unit tests
 describe("returnImportedUserScores", () => {
-	it("should return an empty array when both userScores and excelData are empty", () => {
+	it("should handle empty inputs", () => {
 		const result = returnImportedUserScores([], []);
 		expect(result).toEqual([]);
 	});
 
-	it("should merge userScores and excelData and return the highest score for each user", () => {
-		const result = returnImportedUserScores(mockUserScores, mockExcelData);
-		const expected: UserScore[] = [
-			{ name: "David", score: 30, userId: 6 },
-			{ name: "Charlie", score: 25, userId: 3 },
-			{ name: "Alice", score: 20, userId: 1 },
-			{ name: "Bob", score: 15, userId: 2 },
+	it("should add new users from Excel data", () => {
+		const userScores: UserScore[] = [];
+		const excelData: ExcelRow[] = [
+			{ name: "Alice", score: 100 },
+			{ name: "Bob", score: 90 },
 		];
+
+		const result = returnImportedUserScores(userScores, excelData);
+
+		const expectedAlice: UserScore = {
+			name: "Alice",
+			score: 100,
+			userId: 1,
+			allScores: [100],
+		};
+
+		const expectedBob: UserScore = {
+			name: "Bob",
+			score: 90,
+			userId: 2,
+			allScores: [90],
+		};
+
+		expect(result).toHaveLength(2);
+		expect(result[0]).toEqual(expectedAlice);
+		expect(result[1]).toEqual(expectedBob);
+	});
+
+	it("should update existing users with new scores", () => {
+		const userScores: UserScore[] = [
+			{
+				name: "Alice",
+				score: 80,
+				userId: 1,
+				allScores: [80],
+			},
+		];
+		const excelData: ExcelRow[] = [{ name: "Alice", score: 90 }];
+
+		const result = returnImportedUserScores(userScores, excelData);
+
+		const expected: UserScore = {
+			name: "Alice",
+			score: 90,
+			userId: 1,
+			allScores: [80, 90],
+		};
+
+		expect(result).toHaveLength(1);
+		expect(result[0]).toEqual(expected);
+	});
+
+	it("should maintain unique scores in allScores array", () => {
+		const userScores: UserScore[] = [
+			{
+				name: "Alice",
+				score: 80,
+				userId: 1,
+				allScores: [80],
+			},
+		];
+		const excelData: ExcelRow[] = [
+			{ name: "Alice", score: 80 }, // Duplicate score
+			{ name: "Alice", score: 90 }, // New score
+		];
+
+		const result = returnImportedUserScores(userScores, excelData);
+
+		const expected: UserScore = {
+			name: "Alice",
+			score: 90,
+			userId: 1,
+			allScores: [80, 90],
+		};
+
+		expect(result[0]).toEqual(expected);
+	});
+
+	it("should sort users by score in descending order", () => {
+		const userScores: UserScore[] = [];
+		const excelData: ExcelRow[] = [
+			{ name: "Charlie", score: 70 },
+			{ name: "Alice", score: 100 },
+			{ name: "Bob", score: 85 },
+		];
+
+		const result = returnImportedUserScores(userScores, excelData);
+
+		const expected: UserScore[] = [
+			{ name: "Alice", score: 100, userId: 2, allScores: [100] },
+			{ name: "Bob", score: 85, userId: 3, allScores: [85] },
+			{ name: "Charlie", score: 70, userId: 1, allScores: [70] },
+		];
+
 		expect(result).toEqual(expected);
 	});
 
-	it("should add new users from excelData with unique userIds", () => {
-		const result = returnImportedUserScores(mockUserScores, mockExcelData);
-		expect(result).toEqual(
-			expect.arrayContaining([
-				expect.objectContaining({ userId: expect.any(Number), name: "David" }),
-			]),
-		);
-	});
-
-	it("should return the highest score when a user has scores in both userScores and excelData", () => {
-		const result = returnImportedUserScores(mockUserScores, [
-			{ name: "Alice", score: 25 },
-		]);
-		expect(result).toEqual([
-			{ name: "Alice", score: 25, userId: 1 },
-			{ name: "Bob", score: 15, userId: 2 },
-			{ name: "Charlie", score: 5, userId: 3 },
-		]);
-	});
-
-	it("should handle users that exist only in excelData and not in userScores", () => {
-		const result = returnImportedUserScores(mockUserScores, [
-			{ name: "Eve", score: 40 },
-		]);
-		expect(result).toEqual([
-			{ name: "Eve", score: 40, userId: 4 },
-			...mockUserScores.sort((a, b) => b.score - a.score),
-		]);
-	});
-
-	it("should return an empty array when all excelData is empty", () => {
-		const result = returnImportedUserScores(mockUserScores, []);
-		expect(result).toEqual(mockUserScores);
-	});
-
-	it("should handle empty userScores with only data from excelData", () => {
-		const result = returnImportedUserScores([], mockExcelData);
-		const expected: UserScore[] = [
-			{ name: "David", score: 30, userId: 3 },
-			{ name: "Charlie", score: 25, userId: 2 },
-			{ name: "Alice", score: 20, userId: 1 },
+	it("should correctly assign new userIds based on highest existing userId", () => {
+		const userScores: UserScore[] = [
+			{
+				name: "Alice",
+				score: 100,
+				userId: 5,
+				allScores: [100],
+			},
 		];
-		expect(result).toEqual(expected);
-	});
+		const excelData: ExcelRow[] = [
+			{ name: "Bob", score: 90 },
+			{ name: "Charlie", score: 85 },
+		];
 
-	it("should sort the final data by score in descending order", () => {
-		const result = returnImportedUserScores(mockUserScores, [
-			{ name: "Eve", score: 40 },
-			{ name: "Alice", score: 30 },
-		]);
-		expect(result).toEqual([
-			{ name: "Eve", score: 40, userId: 4 },
-			{ name: "Alice", score: 30, userId: 1 },
-			{ name: "Bob", score: 15, userId: 2 },
-			{ name: "Charlie", score: 5, userId: 3 },
-		]);
+		const result = returnImportedUserScores(userScores, excelData);
+
+		const expected: UserScore[] = [
+			{ name: "Alice", score: 100, userId: 5, allScores: [100] },
+			{ name: "Bob", score: 90, userId: 6, allScores: [90] },
+			{ name: "Charlie", score: 85, userId: 7, allScores: [85] },
+		];
+
+		expect(result).toEqual(expected);
 	});
 });
