@@ -2,6 +2,7 @@ export type UserScore = {
 	name: string;
 	score: number;
 	userId: number;
+	allScores: number[];
 };
 
 export type ExcelRow = {
@@ -22,4 +23,9 @@ export type DuplicateUser = UserScore & {
 export type NewUser = {
 	name: string;
 	score: number;
+};
+
+export type ActiveUser = {
+	name: string;
+	allScores: number[];
 };
