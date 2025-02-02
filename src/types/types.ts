@@ -13,3 +13,13 @@ export type ExcelDropzoneProps = {
 	label: string;
 	onSheetDrop: (rows: ExcelRow[]) => void;
 };
+
+export type DuplicateUser = UserScore & {
+	isScoreHigher: boolean;
+	newUserScore: NewUser;
+};
+
+export type NewUser = {
+	name: string;
+	score: number;
+};
