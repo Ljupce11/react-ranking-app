@@ -1,6 +1,15 @@
 import type { ExcelRow } from "../types/types";
 import type { UserScore } from "../types/types";
 
+/**
+ * Merges and updates user scores with imported Excel data.
+ *
+ * @param userScores - Array of existing user scores
+ * @param excelData - Array of imported Excel rows containing new score data
+ * @returns Array of merged and updated user scores, sorted by score in descending order
+ *
+ */
+
 export const returnImportedUserScores = (
 	userScores: UserScore[],
 	excelData: ExcelRow[],

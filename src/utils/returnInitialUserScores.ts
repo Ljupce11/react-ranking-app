@@ -2,6 +2,11 @@ import scores from "../scores";
 import type { UserScore } from "../types/types";
 import users from "../users";
 
+/**
+ * Processes user scores and returns an array of user data with their highest scores.
+ * @returns {UserScore[]} An array of user scores sorted by highest score in descending order.
+ */
+
 export const returnInitialUserScores = () => {
 	const initialData: UserScore[] = [];
 	const userSet = new Set();
