@@ -6,7 +6,8 @@
 	"type": "module",
 	"scripts": {
 		"start": "vite",
-		"test": "vitest"
+		"test": "vitest",
+		"tsc": "tsc"
 	},
 	"author": "",
 	"license": "ISC",
