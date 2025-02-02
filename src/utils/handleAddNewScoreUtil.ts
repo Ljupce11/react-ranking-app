@@ -34,6 +34,7 @@ export const handleAddNewScoreUtil = (
 		{
 			...newUser,
 			userId: Math.max(0, ...userScores.map((user) => user.userId)) + 1,
+			allScores: [newUser.score],
 		},
 	];
 	return {
