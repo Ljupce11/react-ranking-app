@@ -1,20 +1,10 @@
-import { Button, Container, H2, Icon, P } from "@northlight/ui";
+import { Container, H2, Icon } from "@northlight/ui";
 import React, { useState } from "react";
 
-import {
-	HStack,
-	Modal,
-	ModalBody,
-	ModalCloseButton,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	ModalOverlay,
-	useDisclosure,
-	useToast,
-} from "@chakra-ui/react";
+import { HStack, useDisclosure, useToast } from "@chakra-ui/react";
 import { ExecutionDuo } from "@northlight/icons";
 import { AddUserScoreSection } from "./components/AddUserScoreSection.js";
+import { DuplicateUserModal } from "./components/DuplicateUserModal.js";
 // import { ExerciseDescription } from "./components/ExerciseDescription.js";
 import { UserScoresTable } from "./components/UserScoresTable.js";
 import { TOAST_SETTINGS } from "./constants";
@@ -104,30 +94,12 @@ export default function App() {
 			</HStack>
 			{/* <ExerciseDescription /> */}
 			{isOpen && duplicateUser && (
-				<Modal size={"xl"} onClose={onClose} isOpen={isOpen} isCentered>
-					<ModalOverlay />
-					<ModalContent>
-						<ModalHeader>User already exists</ModalHeader>
-						<ModalCloseButton />
-						<ModalBody>
-							<P>
-								The user with name <strong>{duplicateUser.name}</strong> already
-								exists and has a
-								<strong>
-									{duplicateUser.isScoreHigher ? " higher " : " lower "}
-								</strong>
-								score ({duplicateUser.score})
-							</P>
-							<P>Would you like to override the user's existing score?</P>
-						</ModalBody>
-						<ModalFooter gap={2}>
-							<Button onClick={onClose}>No</Button>
-							<Button onClick={() => overrideExistingUserScore(duplicateUser)}>
-								Yes
-							</Button>
-						</ModalFooter>
-					</ModalContent>
-				</Modal>
+				<DuplicateUserModal
+					isOpen={isOpen}
+					duplicateUser={duplicateUser as DuplicateUser}
+					onClose={onClose}
+					overrideExistingUserScore={overrideExistingUserScore}
+				/>
 			)}
 			<AddUserScoreSection
 				handleSheetData={handleSheetData}
