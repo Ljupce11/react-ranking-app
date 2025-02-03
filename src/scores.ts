@@ -20,4 +20,4 @@ export default [
   { userId: 1, score: 983 },
   { userId: 1, score: 163 },
   { userId: 3, score: 701 },
-]
+];

@@ -6,25 +6,25 @@ import type { NewUser, UserScore } from "../types/types";
  * @param userScores - Array of existing user scores
  * @param existingUserIndex - Index of the user to update in the userScores array
  * @returns Sorted array of user scores with updated scores for the existing user
- */
+*/
 
 export const returnUpdatedExistingUserScore = (
-	newUserScore: NewUser,
-	userScores: UserScore[],
-	existingUserIndex: number,
+  newUserScore: NewUser,
+  userScores: UserScore[],
+  existingUserIndex: number,
 ): UserScore[] => {
-	const updatedUserScores = [...userScores];
+  const updatedUserScores = [...userScores];
 
-	updatedUserScores[existingUserIndex].allScores = Array.from(
-		[
-			...updatedUserScores[existingUserIndex].allScores,
-			newUserScore.score,
-		].sort((a, b) => a - b),
-	);
+  updatedUserScores[existingUserIndex].allScores = Array.from(
+    [
+      ...updatedUserScores[existingUserIndex].allScores,
+      newUserScore.score,
+    ].sort((a, b) => a - b),
+  );
 
-	updatedUserScores[existingUserIndex].score = Math.max(
-		...updatedUserScores[existingUserIndex].allScores,
-	);
+  updatedUserScores[existingUserIndex].score = Math.max(
+    ...updatedUserScores[existingUserIndex].allScores,
+  );
 
-	return updatedUserScores.sort((a, b) => b.score - a.score);
+  return updatedUserScores.sort((a, b) => b.score - a.score);
 };
