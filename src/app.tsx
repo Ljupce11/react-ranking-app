@@ -1,7 +1,7 @@
-import { Container, H2, Icon } from "@northlight/ui";
-import React, { Suspense, useState } from "react";
 import { HStack, useDisclosure, useToast } from "@chakra-ui/react";
 import { ExecutionDuo } from "@northlight/icons";
+import { Container, H2, Icon } from "@northlight/ui";
+import React, { Suspense, useState } from "react";
 
 import { AddUserScoreSection } from "./components/AddUserScoreSection.js";
 // import { ExerciseDescription } from "./components/ExerciseDescription.js";

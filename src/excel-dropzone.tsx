@@ -1,9 +1,9 @@
+import { DataUploadDuo } from "@northlight/icons";
 import { palette } from "@northlight/tokens";
 import { Box, Center, Icon, VStack } from "@northlight/ui";
 import React from "react";
 import Dropzone from "react-dropzone";
 import { read, utils } from "xlsx";
-import { DataUploadDuo } from "@northlight/icons";
 
 import type { ExcelDropzoneProps } from "./types/types";
 
