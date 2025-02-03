@@ -1,8 +1,8 @@
 import { Container, H2, Icon } from "@northlight/ui";
 import React, { Suspense, useState } from "react";
-
 import { HStack, useDisclosure, useToast } from "@chakra-ui/react";
 import { ExecutionDuo } from "@northlight/icons";
+
 import { AddUserScoreSection } from "./components/AddUserScoreSection.js";
 // import { ExerciseDescription } from "./components/ExerciseDescription.js";
 import { UserScoresTable } from "./components/UserScoresTable.js";
@@ -99,7 +99,8 @@ export default function App() {
 				<Icon size="lg" variant="success" as={ExecutionDuo} />
 				<H2>Mediatool exercise</H2>
 			</HStack>
-			{/* <ExerciseDescription /> */}
+			{/* Commented out so there is more screen space to focus on the exercise features */}
+			{/* <ExerciseDescription />  */}
 			{isOpen && duplicateUser && (
 				<Suspense fallback={null}>
 					<DuplicateUserModal
