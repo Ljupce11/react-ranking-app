@@ -68,3 +68,37 @@ If you then add a name and a score via the form with the name `Pierce` and score
   * Barry - 917
   * Hedvig - 903
   * Glen - 607
+
+## Features
+
+- Display ranking list from existing data
+- View individual user scores
+- Add new user scores
+- Import scores from Excel files
+- Update existing scores
+- Modal view for score history
+
+## Technologies
+
+- React
+- TypeScript
+- Biome (for code formatting and linting)
+- Vite
+- Vitest
+
+## Development
+
+### Setup
+```
+npm install
+```
+
+### Running the Application
+```
+npm run start
+```
+
+### Testing
+```
+npm test
+```
