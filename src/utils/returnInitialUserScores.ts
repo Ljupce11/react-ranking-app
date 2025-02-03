@@ -21,7 +21,7 @@ export const returnInitialUserScores = () => {
 			.sort((a, b) => a.score - b.score)
 			.map(({ score }) => score);
 		const uniqueScores = Array.from(new Set(sortedScores));
-		const highestScore = uniqueScores[uniqueScores.length - 1];
+		const highestScore = Math.max(...uniqueScores);
 		initialData.push({
 			name: user.name,
 			userId: user._id,
