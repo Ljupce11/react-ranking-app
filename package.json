@@ -7,7 +7,9 @@
 	"scripts": {
 		"start": "vite",
 		"test": "vitest",
-		"tsc": "tsc"
+		"tsc": "tsc",
+		"lint": "biome check ./src",
+    "format": "biome format ./src"
 	},
 	"author": "",
 	"license": "ISC",
@@ -21,6 +23,7 @@
 		"xlsx": "^0.18.5"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
 		"@chakra-ui/react": "^2.8.2",
 		"@types/react": "^18.2.55",
 		"@types/react-dom": "^18.2.19",
