@@ -6,7 +6,7 @@ import type { NewUser, UserScore } from "../types/types";
  * @param userScores - Array of existing user scores
  * @param existingUserIndex - Index of the user to update in the userScores array
  * @returns Sorted array of user scores with updated scores for the existing user
-*/
+ */
 
 export const returnUpdatedExistingUserScore = (
   newUserScore: NewUser,
